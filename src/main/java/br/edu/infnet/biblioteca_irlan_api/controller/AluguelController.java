@@ -1,6 +1,7 @@
 package br.edu.infnet.biblioteca_irlan_api.controller;
 
-import br.edu.infnet.biblioteca_irlan_api.domain.Aluguel;
+import br.edu.infnet.biblioteca_irlan_api.dto.AluguelRequestDTO;
+import br.edu.infnet.biblioteca_irlan_api.dto.AluguelResponseDTO;
 import br.edu.infnet.biblioteca_irlan_api.service.AluguelService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -25,7 +26,7 @@ public class AluguelController {
 
     @GetMapping
     @Operation(summary = "Listar todos os aluguéis", description = "Retorna uma lista de todos os registros de aluguéis")
-    public ResponseEntity<List<Aluguel>> obterAlugueis(
+    public ResponseEntity<List<AluguelResponseDTO>> obterAlugueis(
             @RequestParam(required = false) Long idLivro,
             @RequestParam(required = false) Long idAluno) {
 
@@ -36,7 +37,7 @@ public class AluguelController {
             return ResponseEntity.ok(aluguelService.buscarAlugueisPorAluno(idAluno));
         }
 
-        return ResponseEntity.ok(aluguelService.obterLista().stream().toList());
+        return ResponseEntity.ok(aluguelService.obterAlugueis().stream().toList());
     }
 
     @GetMapping("/ativos")
@@ -47,28 +48,27 @@ public class AluguelController {
 
     @GetMapping("/{id}")
     @Operation(summary = "Obter aluguel por ID", description = "Retorna os detalhes de um aluguel específico através do seu identificador")
-    public ResponseEntity<Aluguel> obterAluguelPorId(@PathVariable Long id) {
-        return ResponseEntity.ok(aluguelService.obterPorId(id));
+    public ResponseEntity<AluguelResponseDTO> obterAluguelPorId(@PathVariable Long id) {
+        AluguelResponseDTO response = aluguelService.toResponseDTO(aluguelService.obterPorId(id));
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/livro")
     @Operation(summary = "Obter aluguel por ID do Livro", description = "Busca o registro de aluguel associado a um livro específico")
-    public ResponseEntity<Aluguel> obterAluguelPorLivro(@RequestParam Long idLivro) {
+    public ResponseEntity<AluguelResponseDTO> obterAluguelPorLivro(@RequestParam Long idLivro) {
         return ResponseEntity.ok(aluguelService.buscarAluguelPorLivro(idLivro));
     }
 
     @PostMapping("/alugar")
     @Operation(summary = "Registrar novo aluguel", description = "Cria um novo registro de aluguel de livro")
-    public ResponseEntity<Aluguel> alugar(@Valid @RequestBody Aluguel aluguel) {
-        aluguelService.alugar(aluguel);
-        return ResponseEntity.status(CREATED).body(aluguel);
+    public ResponseEntity<AluguelResponseDTO> alugar(@Valid @RequestBody AluguelRequestDTO aluguel) {
+        return ResponseEntity.status(CREATED).body(aluguelService.alugar(aluguel));
     }
 
     @PutMapping("/{id}/alterar")
     @Operation(summary = "Alterar livro de um aluguel", description = "Atualiza o livro associado a um aluguel existente")
-    public ResponseEntity<Aluguel> alterarLivroAlugado(@PathVariable Long id, @RequestParam Long idLivroAtual, @Valid @RequestBody Aluguel aluguelAlterado) {
-        aluguelService.alterarLivroAlugado(idLivroAtual, aluguelAlterado.getLivro());
-        return ResponseEntity.ok(aluguelAlterado);
+    public ResponseEntity<AluguelResponseDTO> alterarLivroAlugado(@PathVariable Long id, @RequestParam Long idNovoLivro) {
+        return ResponseEntity.ok(aluguelService.alterarLivroAlugado(id, idNovoLivro));
     }
 
     @PutMapping("/{id}/devolver")

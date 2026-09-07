@@ -35,7 +35,6 @@ public class Curso implements Identificavel {
     private Professor coordenador;
 
     @OneToMany(mappedBy = "curso", cascade = CascadeType.ALL)
-    @JsonManagedReference
     private List<Turma> turmas = new ArrayList<>();
 
     public Curso() {

@@ -3,6 +3,8 @@ package br.edu.infnet.biblioteca_irlan_api.service;
 import br.edu.infnet.biblioteca_irlan_api.domain.Aluguel;
 import br.edu.infnet.biblioteca_irlan_api.domain.Aluno;
 import br.edu.infnet.biblioteca_irlan_api.domain.Livro;
+import br.edu.infnet.biblioteca_irlan_api.dto.AluguelRequestDTO;
+import br.edu.infnet.biblioteca_irlan_api.dto.AluguelResponseDTO;
 import br.edu.infnet.biblioteca_irlan_api.repository.AluguelRepository;
 import br.edu.infnet.biblioteca_irlan_api.repository.AlunoRepository;
 import br.edu.infnet.biblioteca_irlan_api.repository.LivroRepository;
@@ -11,6 +13,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class AluguelService extends BaseService<Aluguel, AluguelRepository> {
@@ -24,41 +27,45 @@ public class AluguelService extends BaseService<Aluguel, AluguelRepository> {
         this.alunoRepository = alunoRepository;
     }
 
-    public void alugar(Aluguel aluguel) {
-        if (isLivroAlugado(aluguel.getLivro().getId())) {
+    public AluguelResponseDTO alugar(AluguelRequestDTO dto) {
+        if (isLivroAlugado(dto.livroId())) {
             throw new IllegalArgumentException("Livro já está alugado.");
         }
-        if (aluguel.getDataInicioAluguel().isAfter(LocalDate.now())) {
+        if (dto.dataInicioAluguel().isAfter(LocalDate.now())) {
             throw new IllegalArgumentException("Não é possível efetivar o aluguel antes da data de início.");
         }
 
+        Aluguel aluguel = toEntity(dto);
         aluguel.setAtivo(true);
         this.incluir(aluguel);
+        return toResponseDTO(aluguel);
     }
 
-    public void alterarLivroAlugado(Long idLivroAtual, Livro novoLivro) {
-        Aluguel aluguelAtual = buscarAluguelPorLivro(idLivroAtual);
-        if (aluguelAtual.getAtivo() == false) {
+    public AluguelResponseDTO alterarLivroAlugado(Long idAluguel, Long idNovoLivro) {
+        Aluguel aluguelAtual = this.obterPorId(idAluguel);
+        if (Boolean.FALSE.equals(aluguelAtual.getAtivo())) {
             throw new IllegalArgumentException("não existe aluguel ativo com esse livro.");
         }
-        if (aluguelAtual == null) {
-            throw new IllegalArgumentException("não existe aluguel com esse livro.");
-        }
+
+        Livro novoLivro = livroRepository.findById(idNovoLivro)
+                .orElseThrow(() -> new IllegalArgumentException("Novo livro não encontrado"));
+
         aluguelAtual.setLivro(novoLivro);
         this.alterar(aluguelAtual);
+        return toResponseDTO(aluguelAtual);
     }
 
-    public void prolongarAluguel(Long idAluguel, LocalDate novoPrazo) {
-        if (!isLivroAlugado(idAluguel)) {
-            throw new IllegalArgumentException("não existe aluguel com esse livro.");
-        }
+    public AluguelResponseDTO prolongarAluguel(Long idAluguel, LocalDate novoPrazo) {
         Aluguel aluguel = this.obterPorId(idAluguel);
         aluguel.setDataFimAluguel(novoPrazo);
         this.alterar(aluguel);
+        return toResponseDTO(aluguel);
     }
 
-    public Collection<Aluguel> obterAlugueis() {
-        return this.obterLista();
+    public Collection<AluguelResponseDTO> obterAlugueis() {
+        return this.obterLista().stream()
+                .map(this::toResponseDTO)
+                .collect(Collectors.toList());
     }
 
     public void finalizarAluguel(Long idAluguel) {
@@ -70,21 +77,26 @@ public class AluguelService extends BaseService<Aluguel, AluguelRepository> {
         this.alterar(aluguel);
     }
 
-    public Aluguel buscarAluguelPorLivro(Long idLivro) {
-        return livroRepository.findById(idLivro)
+    public AluguelResponseDTO buscarAluguelPorLivro(Long idLivro) {
+        Aluguel aluguel = livroRepository.findById(idLivro)
                 .flatMap(repository::findByLivroAndIsAtivoTrue)
                 .orElse(null);
+        return aluguel != null ? toResponseDTO(aluguel) : null;
     }
 
-    public List<Aluguel> buscarAlugueisPorLivro(Long idLivro) {
+    public List<AluguelResponseDTO> buscarAlugueisPorLivro(Long idLivro) {
         return livroRepository.findById(idLivro)
-                .map(repository::findByLivro)
+                .map(livro -> repository.findByLivro(livro).stream()
+                        .map(this::toResponseDTO)
+                        .collect(Collectors.toList()))
                 .orElse(List.of());
     }
 
-    public List<Aluguel> buscarAlugueisPorAluno(Long idAluno) {
+    public List<AluguelResponseDTO> buscarAlugueisPorAluno(Long idAluno) {
         return alunoRepository.findById(idAluno)
-                .map(repository::findByAluno)
+                .map(aluno -> repository.findByAluno(aluno).stream()
+                        .map(this::toResponseDTO)
+                        .collect(Collectors.toList()))
                 .orElse(List.of());
     }
 
@@ -104,5 +116,33 @@ public class AluguelService extends BaseService<Aluguel, AluguelRepository> {
                 .append(aluguel.getDataFimAluguel())
                 .append("\n"));
         return sb.toString();
+    }
+
+    public Aluguel toEntity(AluguelRequestDTO dto) {
+        Aluguel aluguel = new Aluguel();
+        aluguel.setDataInicioAluguel(dto.dataInicioAluguel());
+        aluguel.setDataFimAluguel(dto.dataFimAluguel());
+        aluguel.setAtivo(dto.isAtivo());
+
+        Livro livro = livroRepository.findById(dto.livroId())
+                .orElseThrow(() -> new IllegalArgumentException("Livro não encontrado"));
+        aluguel.setLivro(livro);
+
+        Aluno aluno = alunoRepository.findById(dto.alunoId())
+                .orElseThrow(() -> new IllegalArgumentException("Aluno não encontrado"));
+        aluguel.setAluno(aluno);
+
+        return aluguel;
+    }
+
+    public AluguelResponseDTO toResponseDTO(Aluguel aluguel) {
+        return new AluguelResponseDTO(
+                aluguel.getId(),
+                aluguel.getDataInicioAluguel(),
+                aluguel.getDataFimAluguel(),
+                aluguel.getLivro() != null ? aluguel.getLivro().getTitulo() : null,
+                aluguel.getAluno() != null ? aluguel.getAluno().getNome() : null,
+                aluguel.getAtivo()
+        );
     }
 }

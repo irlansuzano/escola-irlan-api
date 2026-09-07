@@ -1,6 +1,7 @@
 package br.edu.infnet.biblioteca_irlan_api.controller;
 
-import br.edu.infnet.biblioteca_irlan_api.domain.Aluno;
+import br.edu.infnet.biblioteca_irlan_api.dto.AlunoRequestDTO;
+import br.edu.infnet.biblioteca_irlan_api.dto.AlunoResponseDTO;
 import br.edu.infnet.biblioteca_irlan_api.service.AlunoService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -25,35 +26,32 @@ public class AlunoController {
 
     @GetMapping
     @Operation(summary = "Listar todos os alunos", description = "Retorna uma lista de todos os alunos cadastrados")
-    public ResponseEntity<Collection<Aluno>> obterAlunos() {
+    public ResponseEntity<Collection<AlunoResponseDTO>> obterAlunos() {
         return ResponseEntity.ok(alunoService.obterAlunos());
     }
 
     @GetMapping("/{id}")
     @Operation(summary = "Obter aluno por ID", description = "Retorna os detalhes de um aluno específico pelo seu ID")
-    public ResponseEntity<Aluno> obterAlunoPorId(@PathVariable Long id) {
+    public ResponseEntity<AlunoResponseDTO> obterAlunoPorId(@PathVariable Long id) {
         return ResponseEntity.ok(alunoService.obterAlunoPorId(id));
     }
 
     @GetMapping("/matricula/{matricula}")
     @Operation(summary = "Obter aluno por matrícula", description = "Busca um aluno através do seu número de matrícula")
-    public ResponseEntity<Aluno> obterAlunoPorMatricula(@PathVariable String matricula) {
+    public ResponseEntity<AlunoResponseDTO> obterAlunoPorMatricula(@PathVariable String matricula) {
         return ResponseEntity.ok(alunoService.obterAlunoPorMatricula(matricula));
     }
 
     @PostMapping
     @Operation(summary = "Cadastrar aluno", description = "Cria um novo registro de aluno no sistema")
-    public ResponseEntity<Aluno> cadastrarAluno(@Valid @RequestBody Aluno aluno) {
-        alunoService.cadastrarAluno(aluno);
-        return ResponseEntity.status(CREATED).body(aluno);
+    public ResponseEntity<AlunoResponseDTO> cadastrarAluno(@Valid @RequestBody AlunoRequestDTO aluno) {
+        return ResponseEntity.status(CREATED).body(alunoService.cadastrarAluno(aluno));
     }
 
     @PutMapping("/{id}")
     @Operation(summary = "Alterar aluno", description = "Atualiza os dados de um aluno existente")
-    public ResponseEntity<Aluno> alterarAluno(@PathVariable Long id, @Valid @RequestBody Aluno aluno) {
-        aluno.setId(id);
-        alunoService.alterarAluno(aluno);
-        return ResponseEntity.ok(aluno);
+    public ResponseEntity<AlunoResponseDTO> alterarAluno(@PathVariable Long id, @Valid @RequestBody AlunoRequestDTO aluno) {
+        return ResponseEntity.ok(alunoService.alterarAluno(id, aluno));
     }
 
     @DeleteMapping("/{id}")

@@ -1,6 +1,7 @@
 package br.edu.infnet.biblioteca_irlan_api.controller;
 
-import br.edu.infnet.biblioteca_irlan_api.domain.Professor;
+import br.edu.infnet.biblioteca_irlan_api.dto.ProfessorRequestDTO;
+import br.edu.infnet.biblioteca_irlan_api.dto.ProfessorResponseDTO;
 import br.edu.infnet.biblioteca_irlan_api.service.ProfessorService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -25,35 +26,32 @@ public class ProfessorController {
 
     @GetMapping
     @Operation(summary = "Listar todos os professores", description = "Retorna uma lista de todos os professores cadastrados")
-    public ResponseEntity<Collection<Professor>> obterProfessores() {
+    public ResponseEntity<Collection<ProfessorResponseDTO>> obterProfessores() {
         return ResponseEntity.ok(professorService.obterProfessores());
     }
 
     @GetMapping("/{id}")
     @Operation(summary = "Obter professor por ID", description = "Retorna os detalhes de um professor específico pelo seu ID")
-    public ResponseEntity<Professor> obterProfessorPorId(@PathVariable Long id) {
+    public ResponseEntity<ProfessorResponseDTO> obterProfessorPorId(@PathVariable Long id) {
         return ResponseEntity.ok(professorService.obterProfessorPorId(id));
     }
 
     @GetMapping("/registro/{registroProfissional}")
     @Operation(summary = "Obter professor por registro profissional", description = "Busca um professor através do seu registro profissional")
-    public ResponseEntity<Professor> obterProfessorPorRegistro(@PathVariable String registroProfissional) {
+    public ResponseEntity<ProfessorResponseDTO> obterProfessorPorRegistro(@PathVariable String registroProfissional) {
         return ResponseEntity.ok(professorService.obterProfessorPorRegistroProfissional(registroProfissional));
     }
 
     @PostMapping
     @Operation(summary = "Cadastrar professor", description = "Cria um novo registro de professor no sistema")
-    public ResponseEntity<Professor> cadastrarProfessor(@Valid @RequestBody Professor professor) {
-        professorService.cadastrarProfessor(professor);
-        return ResponseEntity.status(CREATED).body(professor);
+    public ResponseEntity<ProfessorResponseDTO> cadastrarProfessor(@Valid @RequestBody ProfessorRequestDTO professor) {
+        return ResponseEntity.status(CREATED).body(professorService.cadastrarProfessor(professor));
     }
 
     @PutMapping("/{id}")
     @Operation(summary = "Alterar professor", description = "Atualiza os dados de um professor existente")
-    public ResponseEntity<Professor> alterarProfessor(@PathVariable Long id, @Valid @RequestBody Professor professor) {
-        professor.setId(id);
-        professorService.alterarProfessor(professor);
-        return ResponseEntity.ok(professor);
+    public ResponseEntity<ProfessorResponseDTO> alterarProfessor(@PathVariable Long id, @Valid @RequestBody ProfessorRequestDTO professor) {
+        return ResponseEntity.ok(professorService.alterarProfessor(id, professor));
     }
 
     @DeleteMapping("/{id}")
