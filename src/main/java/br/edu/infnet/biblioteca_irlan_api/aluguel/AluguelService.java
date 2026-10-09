@@ -1,0 +1,145 @@
+package br.edu.infnet.biblioteca_irlan_api.aluguel;
+
+import br.edu.infnet.biblioteca_irlan_api.aluno.Aluno;
+import br.edu.infnet.biblioteca_irlan_api.livro.Livro;
+import br.edu.infnet.biblioteca_irlan_api.aluno.AlunoRepository;
+import br.edu.infnet.biblioteca_irlan_api.livro.LivroRepository;
+import br.edu.infnet.biblioteca_irlan_api.common.service.BaseService;
+import org.springframework.stereotype.Service;
+
+import java.time.LocalDate;
+import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
+
+@Service
+public class AluguelService extends BaseService<Aluguel, AluguelRepository> {
+
+    private final LivroRepository livroRepository;
+    private final AlunoRepository alunoRepository;
+
+    public AluguelService(AluguelRepository repository, LivroRepository livroRepository, AlunoRepository alunoRepository) {
+        super(repository);
+        this.livroRepository = livroRepository;
+        this.alunoRepository = alunoRepository;
+    }
+
+    public AluguelResponseDTO alugar(AluguelRequestDTO dto) {
+        if (isLivroAlugado(dto.livroId())) {
+            throw new IllegalArgumentException("Livro já está alugado.");
+        }
+        if (dto.dataInicioAluguel().isAfter(LocalDate.now())) {
+            throw new IllegalArgumentException("Não é possível efetivar o aluguel antes da data de início.");
+        }
+
+        Aluguel aluguel = toEntity(dto);
+        aluguel.setAtivo(true);
+        this.incluir(aluguel);
+        return toResponseDTO(aluguel);
+    }
+
+    public AluguelResponseDTO alterarLivroAlugado(Long idAluguel, Long idNovoLivro) {
+        Aluguel aluguelAtual = this.obterPorId(idAluguel);
+        if (Boolean.FALSE.equals(aluguelAtual.getAtivo())) {
+            throw new IllegalArgumentException("não existe aluguel ativo com esse livro.");
+        }
+
+        Livro novoLivro = livroRepository.findById(idNovoLivro)
+                .orElseThrow(() -> new IllegalArgumentException("Novo livro não encontrado"));
+
+        aluguelAtual.setLivro(novoLivro);
+        this.alterar(aluguelAtual);
+        return toResponseDTO(aluguelAtual);
+    }
+
+    public AluguelResponseDTO prolongarAluguel(Long idAluguel, LocalDate novoPrazo) {
+        Aluguel aluguel = this.obterPorId(idAluguel);
+        aluguel.setDataFimAluguel(novoPrazo);
+        this.alterar(aluguel);
+        return toResponseDTO(aluguel);
+    }
+
+    public Collection<AluguelResponseDTO> obterAlugueis() {
+        return this.obterLista().stream()
+                .map(this::toResponseDTO)
+                .collect(Collectors.toList());
+    }
+
+    public void finalizarAluguel(Long idAluguel) {
+        Aluguel aluguel = repository.findById(idAluguel).orElse(null);
+        if (aluguel == null || !Boolean.TRUE.equals(aluguel.getAtivo())) {
+            return;
+        }
+        aluguel.setAtivo(false);
+        this.alterar(aluguel);
+    }
+
+    public AluguelResponseDTO buscarAluguelPorLivro(Long idLivro) {
+        Aluguel aluguel = livroRepository.findById(idLivro)
+                .flatMap(repository::findByLivroAndIsAtivoTrue)
+                .orElse(null);
+        return aluguel != null ? toResponseDTO(aluguel) : null;
+    }
+
+    public List<AluguelResponseDTO> buscarAlugueisPorLivro(Long idLivro) {
+        return livroRepository.findById(idLivro)
+                .map(livro -> repository.findByLivro(livro).stream()
+                        .map(this::toResponseDTO)
+                        .collect(Collectors.toList()))
+                .orElse(List.of());
+    }
+
+    public List<AluguelResponseDTO> buscarAlugueisPorAluno(Long idAluno) {
+        return alunoRepository.findById(idAluno)
+                .map(aluno -> repository.findByAluno(aluno).stream()
+                        .map(this::toResponseDTO)
+                        .collect(Collectors.toList()))
+                .orElse(List.of());
+    }
+
+    private boolean isLivroAlugado(Long idLivro) {
+        return livroRepository.findById(idLivro)
+                .map(livro -> repository.findByLivroAndIsAtivoTrue(livro).isPresent())
+                .orElse(false);
+    }
+
+    public String obterListaAlgueisAtivos() {
+        List<Aluguel> alugueisAtivos = repository.findByIsAtivoTrue();
+        StringBuilder sb = new StringBuilder("Os seguintes Alugueis estão ativos:\n");
+        alugueisAtivos.forEach(aluguel -> sb.append(aluguel.getLivro().getTitulo())
+                .append(" alugado por ")
+                .append(aluguel.getAluno().getNome())
+                .append(" até ")
+                .append(aluguel.getDataFimAluguel())
+                .append("\n"));
+        return sb.toString();
+    }
+
+    public Aluguel toEntity(AluguelRequestDTO dto) {
+        Aluguel aluguel = new Aluguel();
+        aluguel.setDataInicioAluguel(dto.dataInicioAluguel());
+        aluguel.setDataFimAluguel(dto.dataFimAluguel());
+        aluguel.setAtivo(dto.isAtivo());
+
+        Livro livro = livroRepository.findById(dto.livroId())
+                .orElseThrow(() -> new IllegalArgumentException("Livro não encontrado"));
+        aluguel.setLivro(livro);
+
+        Aluno aluno = alunoRepository.findById(dto.alunoId())
+                .orElseThrow(() -> new IllegalArgumentException("Aluno não encontrado"));
+        aluguel.setAluno(aluno);
+
+        return aluguel;
+    }
+
+    public AluguelResponseDTO toResponseDTO(Aluguel aluguel) {
+        return new AluguelResponseDTO(
+                aluguel.getId(),
+                aluguel.getDataInicioAluguel(),
+                aluguel.getDataFimAluguel(),
+                aluguel.getLivro() != null ? aluguel.getLivro().getTitulo() : null,
+                aluguel.getAluno() != null ? aluguel.getAluno().getNome() : null,
+                aluguel.getAtivo()
+        );
+    }
+}
