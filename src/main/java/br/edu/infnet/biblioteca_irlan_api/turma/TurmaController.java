@@ -66,17 +66,10 @@ public class TurmaController {
         return ResponseEntity.noContent().build();
     }
 
-    @PostMapping("/{id}/alunos")
-    @Operation(summary = "Incluir lista de alunos", description = "Adiciona múltiplos alunos a uma turma")
-    public ResponseEntity<Void> incluirAlunos(@PathVariable Long id, @RequestBody List<AlunoTurmaRequestDTO> alunos) {
-        turmaService.incluirAlunos(id, alunos);
-        return ResponseEntity.noContent().build();
-    }
-
-    @PostMapping("/{id}/aluno")
-    @Operation(summary = "Incluir um aluno", description = "Adiciona um único aluno a uma turma")
-    public ResponseEntity<Void> incluirAluno(@PathVariable Long id, @RequestBody AlunoTurmaRequestDTO aluno) {
-        turmaService.incluirAluno(id, aluno);
+    @PostMapping("/{id}/matricular/{idAluno}")
+    @Operation(summary = "Matricular aluno", description = "Matricula um aluno à turma")
+    public ResponseEntity<Void> matricularAluno(@PathVariable Long id, @PathVariable Long idAluno) {
+        turmaService.matricularAluno(id, idAluno);
         return ResponseEntity.noContent().build();
     }
 }

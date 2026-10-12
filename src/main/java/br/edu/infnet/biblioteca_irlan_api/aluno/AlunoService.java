@@ -50,12 +50,6 @@ public class AlunoService extends BaseService<Aluno, AlunoRepository> {
         alunoExistente.setDataNascimento(dto.dataNascimento());
         alunoExistente.setMatricula(dto.matricula());
 
-        if (dto.turmaId() != null) {
-            Turma turma = turmaRepository.findById(dto.turmaId())
-                    .orElseThrow(() -> new IllegalArgumentException("Turma não encontrada"));
-            alunoExistente.setTurma(turma);
-        }
-
         this.alterar(alunoExistente);
         return toResponseDTO(alunoExistente);
     }
@@ -78,12 +72,6 @@ public class AlunoService extends BaseService<Aluno, AlunoRepository> {
         aluno.setDataNascimento(dto.dataNascimento());
         aluno.setMatricula(dto.matricula());
         aluno.setAtivo(true);
-
-        if (dto.turmaId() != null) {
-            Turma turma = turmaRepository.findById(dto.turmaId())
-                    .orElseThrow(() -> new IllegalArgumentException("Turma não encontrada"));
-            aluno.setTurma(turma);
-        }
 
         return aluno;
     }

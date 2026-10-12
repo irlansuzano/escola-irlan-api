@@ -59,22 +59,18 @@ public class TurmaService extends BaseService<Turma, TurmaRepository> {
         }
     }
 
-    public void incluirAlunos(Long idTurma, List<AlunoTurmaRequestDTO> alunos) {
+    public void matricularAluno(Long idTurma, Long idAluno) {
         Turma turma = this.obterPorId(idTurma);
+        Aluno aluno = alunoService.obterPorId(idAluno);
 
-        if (turma != null && alunos != null) {
-            for (AlunoTurmaRequestDTO aluno : alunos) {
-                turma.adicionarAluno(toAluno(aluno));
-            }
-            this.alterar(turma);
+        boolean alunoJaMatriculado = turma.getAlunos().stream().anyMatch(a -> a.getId().equals(idAluno));
+
+        if (alunoJaMatriculado) {
+            throw new IllegalArgumentException("Aluno já está matriculado nesta turma.");
         }
-    }
-
-    public void incluirAluno(Long idTurma, AlunoTurmaRequestDTO aluno) {
-        Turma turma = this.obterPorId(idTurma);
 
         if (turma != null && aluno != null) {
-            turma.adicionarAluno(toAluno(aluno));
+            turma.adicionarAluno(aluno);
             this.alterar(turma);
         }
     }
