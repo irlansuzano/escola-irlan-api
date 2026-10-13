@@ -1,4 +1,4 @@
-package br.edu.infnet.biblioteca_irlan_api.common.domain;
+package br.edu.infnet.escola_irlan_api.common.domain;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;

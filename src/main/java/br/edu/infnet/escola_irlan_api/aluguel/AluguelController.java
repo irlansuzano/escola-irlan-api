@@ -1,4 +1,4 @@
-package br.edu.infnet.biblioteca_irlan_api.aluguel;
+package br.edu.infnet.escola_irlan_api.aluguel;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -46,8 +46,7 @@ public class AluguelController {
     @GetMapping("/{id}")
     @Operation(summary = "Obter aluguel por ID", description = "Retorna os detalhes de um aluguel específico através do seu identificador")
     public ResponseEntity<AluguelResponseDTO> obterAluguelPorId(@PathVariable Long id) {
-        AluguelResponseDTO response = aluguelService.toResponseDTO(aluguelService.obterPorId(id));
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(aluguelService.obterAluguelPorId(id));
     }
 
     @GetMapping("/livro")

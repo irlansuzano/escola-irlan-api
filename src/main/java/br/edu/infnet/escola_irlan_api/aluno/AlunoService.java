@@ -1,8 +1,8 @@
-package br.edu.infnet.biblioteca_irlan_api.aluno;
+package br.edu.infnet.escola_irlan_api.aluno;
 
-import br.edu.infnet.biblioteca_irlan_api.turma.Turma;
-import br.edu.infnet.biblioteca_irlan_api.turma.TurmaRepository;
-import br.edu.infnet.biblioteca_irlan_api.common.service.BaseService;
+import br.edu.infnet.escola_irlan_api.turma.Turma;
+import br.edu.infnet.escola_irlan_api.turma.TurmaRepository;
+import br.edu.infnet.escola_irlan_api.common.service.BaseService;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
@@ -12,26 +12,29 @@ import java.util.stream.Collectors;
 public class AlunoService extends BaseService<Aluno, AlunoRepository> {
 
     private final TurmaRepository turmaRepository;
+    private final AlunoMapper alunoMapper;
 
-    public AlunoService(AlunoRepository repository, TurmaRepository turmaRepository) {
+    public AlunoService(AlunoRepository repository, TurmaRepository turmaRepository, AlunoMapper alunoMapper) {
         super(repository);
         this.turmaRepository = turmaRepository;
+        this.alunoMapper = alunoMapper;
     }
 
     public AlunoResponseDTO obterAlunoPorId(Long id) {
-        return toResponseDTO(this.obterPorId(id));
+        return alunoMapper.toResponseDto(this.obterPorId(id));
     }
 
     public Collection<AlunoResponseDTO> obterAlunos() {
         return this.obterLista().stream()
-                .map(this::toResponseDTO)
+                .map(alunoMapper::toResponseDto)
                 .collect(Collectors.toList());
     }
 
     public AlunoResponseDTO cadastrarAluno(AlunoRequestDTO dto) {
-        Aluno aluno = toEntity(dto);
+        Aluno aluno = alunoMapper.toEntity(dto);
+        aluno.setAtivo(true);
         this.incluir(aluno);
-        return toResponseDTO(aluno);
+        return alunoMapper.toResponseDto(aluno);
     }
 
     public void removerAlunoPorId(Long id) {
@@ -51,41 +54,16 @@ public class AlunoService extends BaseService<Aluno, AlunoRepository> {
         alunoExistente.setMatricula(dto.matricula());
 
         this.alterar(alunoExistente);
-        return toResponseDTO(alunoExistente);
+        return alunoMapper.toResponseDto(alunoExistente);
     }
 
     public AlunoResponseDTO obterAlunoPorMatricula(String matricula) {
         Aluno aluno = repository.findByMatricula(matricula)
                 .orElseThrow(() -> new IllegalArgumentException("Aluno não encontrado com a matrícula: " + matricula));
-        return toResponseDTO(aluno);
+        return alunoMapper.toResponseDto(aluno);
     }
 
     private boolean isAlunoExistente(Long idAluno) {
         return repository.existsById(idAluno);
-    }
-
-    public Aluno toEntity(AlunoRequestDTO dto) {
-        Aluno aluno = new Aluno();
-        aluno.setNome(dto.nome());
-        aluno.setCpf(dto.cpf());
-        aluno.setEmail(dto.email());
-        aluno.setDataNascimento(dto.dataNascimento());
-        aluno.setMatricula(dto.matricula());
-        aluno.setAtivo(true);
-
-        return aluno;
-    }
-
-    public AlunoResponseDTO toResponseDTO(Aluno aluno) {
-        return new AlunoResponseDTO(
-                aluno.getId(),
-                aluno.getNome(),
-                aluno.getCpf(),
-                aluno.getEmail(),
-                aluno.getDataNascimento(),
-                aluno.getMatricula(),
-                aluno.getTurma() != null ? aluno.getTurma().getIdentificador() : null,
-                aluno.isAtivo()
-        );
     }
 }

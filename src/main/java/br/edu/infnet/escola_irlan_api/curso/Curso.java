@@ -1,9 +1,9 @@
-package br.edu.infnet.biblioteca_irlan_api.curso;
+package br.edu.infnet.escola_irlan_api.curso;
 
-import br.edu.infnet.biblioteca_irlan_api.common.domain.Identificavel;
-import br.edu.infnet.biblioteca_irlan_api.common.domain.Pessoa;
-import br.edu.infnet.biblioteca_irlan_api.professor.Professor;
-import br.edu.infnet.biblioteca_irlan_api.turma.Turma;
+import br.edu.infnet.escola_irlan_api.common.domain.Identificavel;
+import br.edu.infnet.escola_irlan_api.common.domain.Pessoa;
+import br.edu.infnet.escola_irlan_api.professor.Professor;
+import br.edu.infnet.escola_irlan_api.turma.Turma;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;

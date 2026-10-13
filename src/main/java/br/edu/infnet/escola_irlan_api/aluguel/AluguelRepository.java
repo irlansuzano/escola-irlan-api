@@ -1,7 +1,7 @@
-package br.edu.infnet.biblioteca_irlan_api.aluguel;
+package br.edu.infnet.escola_irlan_api.aluguel;
 
-import br.edu.infnet.biblioteca_irlan_api.aluno.Aluno;
-import br.edu.infnet.biblioteca_irlan_api.livro.Livro;
+import br.edu.infnet.escola_irlan_api.aluno.Aluno;
+import br.edu.infnet.escola_irlan_api.livro.Livro;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

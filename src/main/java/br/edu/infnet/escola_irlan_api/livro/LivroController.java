@@ -1,4 +1,4 @@
-package br.edu.infnet.biblioteca_irlan_api.livro;
+package br.edu.infnet.escola_irlan_api.livro;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

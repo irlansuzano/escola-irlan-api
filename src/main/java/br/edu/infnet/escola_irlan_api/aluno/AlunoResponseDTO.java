@@ -1,4 +1,4 @@
-package br.edu.infnet.biblioteca_irlan_api.aluno;
+package br.edu.infnet.escola_irlan_api.aluno;
 
 import java.time.LocalDate;
 

@@ -1,4 +1,4 @@
-package br.edu.infnet.biblioteca_irlan_api.common.exception;
+package br.edu.infnet.escola_irlan_api.common.exception;
 
 import java.time.LocalDateTime;
 

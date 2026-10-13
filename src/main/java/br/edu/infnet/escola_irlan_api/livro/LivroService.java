@@ -1,6 +1,6 @@
-package br.edu.infnet.biblioteca_irlan_api.livro;
+package br.edu.infnet.escola_irlan_api.livro;
 
-import br.edu.infnet.biblioteca_irlan_api.common.service.BaseService;
+import br.edu.infnet.escola_irlan_api.common.service.BaseService;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
@@ -9,24 +9,27 @@ import java.util.stream.Collectors;
 @Service
 public class LivroService extends BaseService<Livro, LivroRepository> {
 
-    public LivroService(LivroRepository repository) {
+    private final LivroMapper livroMapper;
+
+    public LivroService(LivroRepository repository, LivroMapper livroMapper) {
         super(repository);
+        this.livroMapper = livroMapper;
     }
 
     public Collection<LivroResponseDTO> obterLivros() {
         return this.obterLista().stream()
-                .map(this::toResponseDTO)
+                .map(livroMapper::toResponseDto)
                 .collect(Collectors.toList());
     }
 
     public LivroResponseDTO obterLivroPorId(Long id) {
-        return toResponseDTO(this.obterPorId(id));
+        return livroMapper.toResponseDto(this.obterPorId(id));
     }
 
     public LivroResponseDTO cadastrarLivro(LivroRequestDTO dto) {
-        Livro livro = toEntity(dto);
+        Livro livro = livroMapper.toEntity(dto);
         this.incluir(livro);
-        return toResponseDTO(livro);
+        return livroMapper.toResponseDto(livro);
     }
 
     public LivroResponseDTO alterarLivro(Long idLivro, LivroRequestDTO dto) {
@@ -35,27 +38,12 @@ public class LivroService extends BaseService<Livro, LivroRepository> {
         livroExistente.setTitulo(dto.titulo());
         livroExistente.setAutor(dto.autor());
         this.alterar(livroExistente);
-        return toResponseDTO(livroExistente);
+        return livroMapper.toResponseDto(livroExistente);
     }
 
     public LivroResponseDTO buscarLivroPorTitulo(String titulo) {
         Livro livro = repository.findByTitulo(titulo)
                 .orElseThrow(() -> new IllegalArgumentException("Livro não encontrado com o título: " + titulo));
-        return toResponseDTO(livro);
-    }
-
-    public Livro toEntity(LivroRequestDTO dto) {
-        Livro livro = new Livro();
-        livro.setTitulo(dto.titulo());
-        livro.setAutor(dto.autor());
-        return livro;
-    }
-
-    public LivroResponseDTO toResponseDTO(Livro livro) {
-        return new LivroResponseDTO(
-                livro.getId(),
-                livro.getTitulo(),
-                livro.getAutor()
-        );
+        return livroMapper.toResponseDto(livro);
     }
 }

@@ -1,10 +1,10 @@
-package br.edu.infnet.biblioteca_irlan_api.aluguel;
+package br.edu.infnet.escola_irlan_api.aluguel;
 
-import br.edu.infnet.biblioteca_irlan_api.aluno.Aluno;
-import br.edu.infnet.biblioteca_irlan_api.livro.Livro;
-import br.edu.infnet.biblioteca_irlan_api.aluno.AlunoRepository;
-import br.edu.infnet.biblioteca_irlan_api.livro.LivroRepository;
-import br.edu.infnet.biblioteca_irlan_api.common.service.BaseService;
+import br.edu.infnet.escola_irlan_api.aluno.Aluno;
+import br.edu.infnet.escola_irlan_api.livro.Livro;
+import br.edu.infnet.escola_irlan_api.aluno.AlunoRepository;
+import br.edu.infnet.escola_irlan_api.livro.LivroRepository;
+import br.edu.infnet.escola_irlan_api.common.service.BaseService;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -17,11 +17,13 @@ public class AluguelService extends BaseService<Aluguel, AluguelRepository> {
 
     private final LivroRepository livroRepository;
     private final AlunoRepository alunoRepository;
+    private final AluguelMapper aluguelMapper;
 
-    public AluguelService(AluguelRepository repository, LivroRepository livroRepository, AlunoRepository alunoRepository) {
+    public AluguelService(AluguelRepository repository, LivroRepository livroRepository, AlunoRepository alunoRepository, AluguelMapper aluguelMapper) {
         super(repository);
         this.livroRepository = livroRepository;
         this.alunoRepository = alunoRepository;
+        this.aluguelMapper = aluguelMapper;
     }
 
     public AluguelResponseDTO alugar(AluguelRequestDTO dto) {
@@ -35,7 +37,7 @@ public class AluguelService extends BaseService<Aluguel, AluguelRepository> {
         Aluguel aluguel = toEntity(dto);
         aluguel.setAtivo(true);
         this.incluir(aluguel);
-        return toResponseDTO(aluguel);
+        return aluguelMapper.toResponseDto(aluguel);
     }
 
     public AluguelResponseDTO alterarLivroAlugado(Long idAluguel, Long idNovoLivro) {
@@ -49,19 +51,23 @@ public class AluguelService extends BaseService<Aluguel, AluguelRepository> {
 
         aluguelAtual.setLivro(novoLivro);
         this.alterar(aluguelAtual);
-        return toResponseDTO(aluguelAtual);
+        return aluguelMapper.toResponseDto(aluguelAtual);
     }
 
     public AluguelResponseDTO prolongarAluguel(Long idAluguel, LocalDate novoPrazo) {
         Aluguel aluguel = this.obterPorId(idAluguel);
         aluguel.setDataFimAluguel(novoPrazo);
         this.alterar(aluguel);
-        return toResponseDTO(aluguel);
+        return aluguelMapper.toResponseDto(aluguel);
+    }
+
+    public AluguelResponseDTO obterAluguelPorId(Long id) {
+        return aluguelMapper.toResponseDto(this.obterPorId(id));
     }
 
     public Collection<AluguelResponseDTO> obterAlugueis() {
         return this.obterLista().stream()
-                .map(this::toResponseDTO)
+                .map(aluguelMapper::toResponseDto)
                 .collect(Collectors.toList());
     }
 
@@ -78,13 +84,13 @@ public class AluguelService extends BaseService<Aluguel, AluguelRepository> {
         Aluguel aluguel = livroRepository.findById(idLivro)
                 .flatMap(repository::findByLivroAndIsAtivoTrue)
                 .orElse(null);
-        return aluguel != null ? toResponseDTO(aluguel) : null;
+        return aluguel != null ? aluguelMapper.toResponseDto(aluguel) : null;
     }
 
     public List<AluguelResponseDTO> buscarAlugueisPorLivro(Long idLivro) {
         return livroRepository.findById(idLivro)
                 .map(livro -> repository.findByLivro(livro).stream()
-                        .map(this::toResponseDTO)
+                        .map(aluguelMapper::toResponseDto)
                         .collect(Collectors.toList()))
                 .orElse(List.of());
     }
@@ -92,7 +98,7 @@ public class AluguelService extends BaseService<Aluguel, AluguelRepository> {
     public List<AluguelResponseDTO> buscarAlugueisPorAluno(Long idAluno) {
         return alunoRepository.findById(idAluno)
                 .map(aluno -> repository.findByAluno(aluno).stream()
-                        .map(this::toResponseDTO)
+                        .map(aluguelMapper::toResponseDto)
                         .collect(Collectors.toList()))
                 .orElse(List.of());
     }
@@ -116,10 +122,7 @@ public class AluguelService extends BaseService<Aluguel, AluguelRepository> {
     }
 
     public Aluguel toEntity(AluguelRequestDTO dto) {
-        Aluguel aluguel = new Aluguel();
-        aluguel.setDataInicioAluguel(dto.dataInicioAluguel());
-        aluguel.setDataFimAluguel(dto.dataFimAluguel());
-        aluguel.setAtivo(dto.isAtivo());
+        Aluguel aluguel = aluguelMapper.toEntity(dto);
 
         Livro livro = livroRepository.findById(dto.livroId())
                 .orElseThrow(() -> new IllegalArgumentException("Livro não encontrado"));
@@ -130,16 +133,5 @@ public class AluguelService extends BaseService<Aluguel, AluguelRepository> {
         aluguel.setAluno(aluno);
 
         return aluguel;
-    }
-
-    public AluguelResponseDTO toResponseDTO(Aluguel aluguel) {
-        return new AluguelResponseDTO(
-                aluguel.getId(),
-                aluguel.getDataInicioAluguel(),
-                aluguel.getDataFimAluguel(),
-                aluguel.getLivro() != null ? aluguel.getLivro().getTitulo() : null,
-                aluguel.getAluno() != null ? aluguel.getAluno().getNome() : null,
-                aluguel.getAtivo()
-        );
     }
 }

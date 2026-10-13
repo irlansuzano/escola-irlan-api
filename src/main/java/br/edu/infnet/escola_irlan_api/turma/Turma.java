@@ -1,9 +1,9 @@
-package br.edu.infnet.biblioteca_irlan_api.turma;
+package br.edu.infnet.escola_irlan_api.turma;
 
-import br.edu.infnet.biblioteca_irlan_api.aluno.Aluno;
-import br.edu.infnet.biblioteca_irlan_api.curso.Curso;
-import br.edu.infnet.biblioteca_irlan_api.common.domain.Identificavel;
-import br.edu.infnet.biblioteca_irlan_api.professor.Professor;
+import br.edu.infnet.escola_irlan_api.aluno.Aluno;
+import br.edu.infnet.escola_irlan_api.curso.Curso;
+import br.edu.infnet.escola_irlan_api.common.domain.Identificavel;
+import br.edu.infnet.escola_irlan_api.professor.Professor;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;

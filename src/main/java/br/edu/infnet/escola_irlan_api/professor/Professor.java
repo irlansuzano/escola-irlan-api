@@ -1,7 +1,7 @@
-package br.edu.infnet.biblioteca_irlan_api.professor;
+package br.edu.infnet.escola_irlan_api.professor;
 
-import br.edu.infnet.biblioteca_irlan_api.curso.Curso;
-import br.edu.infnet.biblioteca_irlan_api.common.domain.Pessoa;
+import br.edu.infnet.escola_irlan_api.curso.Curso;
+import br.edu.infnet.escola_irlan_api.common.domain.Pessoa;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

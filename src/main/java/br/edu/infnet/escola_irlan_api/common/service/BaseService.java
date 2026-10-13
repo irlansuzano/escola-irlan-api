@@ -1,7 +1,7 @@
-package br.edu.infnet.biblioteca_irlan_api.common.service;
+package br.edu.infnet.escola_irlan_api.common.service;
 
-import br.edu.infnet.biblioteca_irlan_api.common.domain.Identificavel;
-import br.edu.infnet.biblioteca_irlan_api.common.exception.RecursoNaoEncontradoException;
+import br.edu.infnet.escola_irlan_api.common.domain.Identificavel;
+import br.edu.infnet.escola_irlan_api.common.exception.RecursoNaoEncontradoException;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Collection;

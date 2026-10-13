@@ -1,6 +1,6 @@
-package br.edu.infnet.biblioteca_irlan_api.turma;
+package br.edu.infnet.escola_irlan_api.turma;
 
-import br.edu.infnet.biblioteca_irlan_api.aluno.AlunoTurmaRequestDTO;
+import br.edu.infnet.escola_irlan_api.aluno.AlunoTurmaRequestDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;

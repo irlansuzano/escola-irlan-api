@@ -1,4 +1,4 @@
-package br.edu.infnet.biblioteca_irlan_api.aluguel;
+package br.edu.infnet.escola_irlan_api.aluguel;
 
 import jakarta.validation.constraints.NotNull;
 import java.time.LocalDate;

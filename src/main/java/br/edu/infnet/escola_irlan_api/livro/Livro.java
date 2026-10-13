@@ -1,7 +1,7 @@
-package br.edu.infnet.biblioteca_irlan_api.livro;
+package br.edu.infnet.escola_irlan_api.livro;
 
-import br.edu.infnet.biblioteca_irlan_api.aluguel.Aluguel;
-import br.edu.infnet.biblioteca_irlan_api.common.domain.Identificavel;
+import br.edu.infnet.escola_irlan_api.aluguel.Aluguel;
+import br.edu.infnet.escola_irlan_api.common.domain.Identificavel;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;

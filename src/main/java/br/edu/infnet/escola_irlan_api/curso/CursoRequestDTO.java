@@ -1,4 +1,4 @@
-package br.edu.infnet.biblioteca_irlan_api.curso;
+package br.edu.infnet.escola_irlan_api.curso;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;

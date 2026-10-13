@@ -1,4 +1,4 @@
-package br.edu.infnet.biblioteca_irlan_api.professor;
+package br.edu.infnet.escola_irlan_api.professor;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

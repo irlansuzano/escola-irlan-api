@@ -1,6 +1,6 @@
-package br.edu.infnet.biblioteca_irlan_api.professor;
+package br.edu.infnet.escola_irlan_api.professor;
 
-import br.edu.infnet.biblioteca_irlan_api.common.service.BaseService;
+import br.edu.infnet.escola_irlan_api.common.service.BaseService;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
@@ -9,24 +9,28 @@ import java.util.stream.Collectors;
 @Service
 public class ProfessorService extends BaseService<Professor, ProfessorRepository> {
 
-    public ProfessorService(ProfessorRepository repository) {
+    private final ProfessorMapper professorMapper;
+
+    public ProfessorService(ProfessorRepository repository, ProfessorMapper professorMapper) {
         super(repository);
+        this.professorMapper = professorMapper;
     }
 
     public ProfessorResponseDTO obterProfessorPorId(Long id) {
-        return toResponseDTO(this.obterPorId(id));
+        return professorMapper.toResponseDto(this.obterPorId(id));
     }
 
     public Collection<ProfessorResponseDTO> obterProfessores() {
         return this.obterLista().stream()
-                .map(this::toResponseDTO)
+                .map(professorMapper::toResponseDto)
                 .collect(Collectors.toList());
     }
 
     public ProfessorResponseDTO cadastrarProfessor(ProfessorRequestDTO dto) {
-        Professor professor = toEntity(dto);
+        Professor professor = professorMapper.toEntity(dto);
+        professor.setAtivo(true);
         this.incluir(professor);
-        return toResponseDTO(professor);
+        return professorMapper.toResponseDto(professor);
     }
 
     public void removerProfessor(Long id) {
@@ -46,7 +50,7 @@ public class ProfessorService extends BaseService<Professor, ProfessorRepository
         professorExistente.setRegistroProfissional(dto.registroProfissional());
 
         this.alterar(professorExistente);
-        return toResponseDTO(professorExistente);
+        return professorMapper.toResponseDto(professorExistente);
     }
 
     public ProfessorResponseDTO obterProfessorPorRegistroProfissional(String registroProfissional) {
@@ -55,33 +59,10 @@ public class ProfessorService extends BaseService<Professor, ProfessorRepository
         }
         Professor professor = repository.findByRegistroProfissional(registroProfissional)
                 .orElseThrow(() -> new IllegalArgumentException("Não foi encontrado Professor com o registro profissional " + registroProfissional));
-        return toResponseDTO(professor);
+        return professorMapper.toResponseDto(professor);
     }
 
     public boolean isProfessorExistente(Long idProfessor) {
         return repository.existsById(idProfessor);
-    }
-
-    public Professor toEntity(ProfessorRequestDTO dto) {
-        Professor professor = new Professor();
-        professor.setNome(dto.nome());
-        professor.setCpf(dto.cpf());
-        professor.setEmail(dto.email());
-        professor.setDataNascimento(dto.dataNascimento());
-        professor.setRegistroProfissional(dto.registroProfissional());
-        professor.setAtivo(true);
-        return professor;
-    }
-
-    public ProfessorResponseDTO toResponseDTO(Professor professor) {
-        return new ProfessorResponseDTO(
-                professor.getId(),
-                professor.getNome(),
-                professor.getCpf(),
-                professor.getEmail(),
-                professor.getDataNascimento(),
-                professor.getRegistroProfissional(),
-                professor.isAtivo()
-        );
     }
 }

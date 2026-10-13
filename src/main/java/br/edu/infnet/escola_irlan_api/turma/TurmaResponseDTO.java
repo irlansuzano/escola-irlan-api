@@ -1,6 +1,6 @@
-package br.edu.infnet.biblioteca_irlan_api.turma;
+package br.edu.infnet.escola_irlan_api.turma;
 
-import br.edu.infnet.biblioteca_irlan_api.aluno.AlunoResponseDTO;
+import br.edu.infnet.escola_irlan_api.aluno.AlunoResponseDTO;
 
 import java.util.List;
 
