@@ -6,6 +6,7 @@ import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
 import java.util.Collection;
 
 import static org.springframework.http.HttpStatus.CREATED;
@@ -24,7 +25,8 @@ public class CursoController {
     @GetMapping
     @Operation(summary = "Listar todos os cursos", description = "Retorna uma lista de todos os cursos cadastrados")
     public ResponseEntity<Collection<CursoResponseDTO>> obterCursos() {
-        return ResponseEntity.ok(cursoService.obterCursos());
+        return ResponseEntity.ok(Arrays.asList(new CursoResponseDTO(1L, "teste", "teste", "teste", true)));
+//                cursoService.obterCursos());
     }
 
     @GetMapping("/{id}")

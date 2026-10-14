@@ -1,4 +1,4 @@
-package br.edu.infnet.escola_irlan_api.application;
+package br.edu.infnet.escola_irlan_api;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

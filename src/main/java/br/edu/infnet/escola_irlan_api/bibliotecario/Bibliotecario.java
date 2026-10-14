@@ -1,14 +1,22 @@
 package br.edu.infnet.escola_irlan_api.bibliotecario;
 
 import br.edu.infnet.escola_irlan_api.common.domain.Pessoa;
+import jakarta.persistence.*;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import java.time.LocalDate;
 import java.util.Objects;
 
+@Entity
+@Table(name = "bibliotecario")
 public class Bibliotecario extends Pessoa {
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "cargo")
     private CargoBibliotecaEnum cargo;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "turno")
     private TurnoBibliotecaEnum turno;
 
     public Bibliotecario() {

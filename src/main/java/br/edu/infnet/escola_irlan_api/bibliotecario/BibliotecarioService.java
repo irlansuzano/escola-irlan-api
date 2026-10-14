@@ -83,7 +83,7 @@ public class BibliotecarioService extends BaseService<Bibliotecario, Bibliotecar
 
     public BibliotecarioResponseDTO cadastrarFuncionario(BibliotecarioRequestDTO bibliotecarioRequestDTO) {
         Bibliotecario bibliotecario = bibliotecarioMapper.toEntity(bibliotecarioRequestDTO);
-        repository.cadastrarFuncionario(bibliotecario);
+        incluir(bibliotecario);
         return bibliotecarioMapper.toResponseDto(bibliotecario);
     }
 }

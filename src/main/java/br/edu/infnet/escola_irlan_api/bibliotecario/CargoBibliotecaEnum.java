@@ -14,13 +14,13 @@ public enum CargoBibliotecaEnum {
         this.descricao = descricao;
     }
 
-    public static String mapearCargoPorId(int cargoId){
+    public static CargoBibliotecaEnum mapearCargoPorId(int cargoId){
         return switch (cargoId) {
-            case 1 -> ORGANIZACAO.descricao;
-            case 2 -> RECEPCAO.descricao;
-            case 3 -> ADMINISTRACAO.descricao;
-            case 4 -> ESTOQUE.descricao;
-            case 5 -> GERENCIA.descricao;
+            case 1 -> ORGANIZACAO;
+            case 2 -> RECEPCAO;
+            case 3 -> ADMINISTRACAO;
+            case 4 -> ESTOQUE;
+            case 5 -> GERENCIA;
             default -> throw new IllegalArgumentException("Cargo inválido: " + cargoId);
         };
     }

@@ -11,11 +11,11 @@ public enum TurnoBibliotecaEnum {
         this.descricao = descricao;
     }
 
-    public static String mapearTurnoPorId(int turnoId){
+    public static TurnoBibliotecaEnum mapearTurnoPorId(int turnoId){
         return switch (turnoId) {
-            case 1 -> MATUTINO.descricao;
-            case 2 -> VESPERTINO.descricao;
-            case 3 -> NOTURNO.descricao;
+            case 1 -> MATUTINO;
+            case 2 -> VESPERTINO;
+            case 3 -> NOTURNO;
             default -> throw new IllegalArgumentException("Turno inválido: " + turnoId);
         };
     }
