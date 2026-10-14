@@ -13,7 +13,6 @@ import java.util.Objects;
 @Table(name = "aluguel")
 public class Aluguel implements Identificavel {
 
-    //teste de commit de commit em estrutura de projeto separado
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

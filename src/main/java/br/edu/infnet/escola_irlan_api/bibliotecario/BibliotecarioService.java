@@ -2,6 +2,8 @@ package br.edu.infnet.escola_irlan_api.bibliotecario;
 
 import br.edu.infnet.escola_irlan_api.bibliotecario.dto.BibliotecarioRequestDTO;
 import br.edu.infnet.escola_irlan_api.bibliotecario.dto.BibliotecarioResponseDTO;
+import br.edu.infnet.escola_irlan_api.common.exception.BadRequestException;
+import br.edu.infnet.escola_irlan_api.common.exception.RecursoNaoEncontradoException;
 import br.edu.infnet.escola_irlan_api.common.service.BaseService;
 import org.springframework.stereotype.Service;
 
@@ -25,16 +27,14 @@ public class BibliotecarioService extends BaseService<Bibliotecario, Bibliotecar
     }
 
     public BibliotecarioResponseDTO obterBibliotecarioPorId(Long id) {
-        Optional<Bibliotecario> bibliotecario = repository.findById(id);
-        if (bibliotecario.isEmpty()) {
-            throw new IllegalArgumentException("Funcionário não encontrado");
-        }
-        return bibliotecario.map(bibliotecarioMapper::toResponseDto).orElseThrow(() -> new IllegalArgumentException("Funcionário não encontrado"));
+        return repository.findById(id)
+                .map(bibliotecarioMapper::toResponseDto)
+                .orElseThrow(() -> new RecursoNaoEncontradoException("Funcionário não encontrado"));
     }
 
     public List<BibliotecarioResponseDTO> buscarPorCargo(Integer cargo) {
         if (cargo == null) {
-            throw new IllegalArgumentException("Cargo não pode ser nulo");
+            throw new BadRequestException("Cargo não pode ser nulo");
         }
 
         return repository.findByCargo(CargoBibliotecaEnum.mapearCargoPorId(cargo)).stream().map(bibliotecarioMapper::toResponseDto)
@@ -64,21 +64,21 @@ public class BibliotecarioService extends BaseService<Bibliotecario, Bibliotecar
     public BibliotecarioResponseDTO desativarFuncionario(Long id) {
         Optional<Bibliotecario> bibliotecario = repository.findById(id);
         if (bibliotecario.isEmpty()) {
-            throw new IllegalArgumentException("Funcionário não encontrado");
+            throw new RecursoNaoEncontradoException("Funcionário não encontrado");
         }
         repository.desativarFuncionario(id);
         bibliotecario.ifPresent(b -> b.setAtivo(false));
-        return bibliotecario.map(bibliotecarioMapper::toResponseDto).orElseThrow(() -> new IllegalArgumentException("Funcionário não encontrado"));
+        return bibliotecario.map(bibliotecarioMapper::toResponseDto).orElseThrow(() -> new RecursoNaoEncontradoException("Funcionário não encontrado"));
     }
 
     public BibliotecarioResponseDTO ativarFuncionario(Long id) {
         Optional<Bibliotecario> bibliotecario = repository.findById(id);
         if (bibliotecario.isEmpty()) {
-            throw new IllegalArgumentException("Funcionário não encontrado");
+            throw new RecursoNaoEncontradoException("Funcionário não encontrado");
         }
         repository.ativarFuncionario(id);
         bibliotecario.ifPresent(b -> b.setAtivo(true));
-        return bibliotecario.map(bibliotecarioMapper::toResponseDto).orElseThrow(() -> new IllegalArgumentException("Funcionário não encontrado"));
+        return bibliotecario.map(bibliotecarioMapper::toResponseDto).orElseThrow(() -> new RecursoNaoEncontradoException("Funcionário não encontrado"));
     }
 
     public BibliotecarioResponseDTO cadastrarFuncionario(BibliotecarioRequestDTO bibliotecarioRequestDTO) {

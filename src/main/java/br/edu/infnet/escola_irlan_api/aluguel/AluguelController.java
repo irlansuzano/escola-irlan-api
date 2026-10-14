@@ -1,5 +1,6 @@
 package br.edu.infnet.escola_irlan_api.aluguel;
 
+import br.edu.infnet.escola_irlan_api.common.dto.MensagemResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -69,8 +70,8 @@ public class AluguelController {
 
     @PutMapping("/{id}/devolver")
     @Operation(summary = "Finalizar aluguel (Devolução)", description = "Marca um aluguel como inativo, indicando a devolução do livro")
-    public ResponseEntity<Void> devolver(@PathVariable Long id) {
+    public ResponseEntity<MensagemResponse> devolver(@PathVariable Long id) {
         aluguelService.finalizarAluguel(id);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(new MensagemResponse("Livro devolvido com sucesso."));
     }
 }

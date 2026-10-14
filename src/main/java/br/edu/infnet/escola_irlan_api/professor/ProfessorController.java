@@ -1,5 +1,6 @@
 package br.edu.infnet.escola_irlan_api.professor;
 
+import br.edu.infnet.escola_irlan_api.common.dto.MensagemResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -53,8 +54,8 @@ public class ProfessorController {
 
     @DeleteMapping("/{id}")
     @Operation(summary = "Remover professor", description = "Exclui o registro de um professor do sistema")
-    public ResponseEntity<Void> removerProfessor(@PathVariable Long id) {
+    public ResponseEntity<MensagemResponse> removerProfessor(@PathVariable Long id) {
         professorService.removerProfessor(id);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(new MensagemResponse("Professor removido com sucesso."));
     }
 }

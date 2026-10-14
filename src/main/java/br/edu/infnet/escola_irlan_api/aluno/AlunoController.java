@@ -1,6 +1,9 @@
 package br.edu.infnet.escola_irlan_api.aluno;
 
+import br.edu.infnet.escola_irlan_api.common.dto.MensagemResponse;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -29,6 +32,10 @@ public class AlunoController {
 
     @GetMapping("/{id}")
     @Operation(summary = "Obter aluno por ID", description = "Retorna os detalhes de um aluno específico pelo seu ID")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Aluno encontrado"),
+            @ApiResponse(responseCode = "404", description = "Aluno não encontrado")
+    })
     public ResponseEntity<AlunoResponseDTO> obterAlunoPorId(@PathVariable Long id) {
         return ResponseEntity.ok(alunoService.obterAlunoPorId(id));
     }
@@ -41,6 +48,10 @@ public class AlunoController {
 
     @PostMapping
     @Operation(summary = "Cadastrar aluno", description = "Cria um novo registro de aluno no sistema")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Aluno cadastrado com sucesso"),
+            @ApiResponse(responseCode = "400", description = "Dados de entrada inválidos")
+    })
     public ResponseEntity<AlunoResponseDTO> cadastrarAluno(@Valid @RequestBody AlunoRequestDTO aluno) {
         return ResponseEntity.status(CREATED).body(alunoService.cadastrarAluno(aluno));
     }
@@ -53,8 +64,8 @@ public class AlunoController {
 
     @DeleteMapping("/{id}")
     @Operation(summary = "Remover aluno", description = "Exclui o registro de um aluno do sistema")
-    public ResponseEntity<Void> removerAluno(@PathVariable Long id) {
+    public ResponseEntity<MensagemResponse> removerAluno(@PathVariable Long id) {
         alunoService.removerAlunoPorId(id);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(new MensagemResponse("Aluno removido com sucesso."));
     }
 }

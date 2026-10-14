@@ -1,5 +1,7 @@
 package br.edu.infnet.escola_irlan_api.professor;
 
+import br.edu.infnet.escola_irlan_api.common.exception.BadRequestException;
+import br.edu.infnet.escola_irlan_api.common.exception.RecursoNaoEncontradoException;
 import br.edu.infnet.escola_irlan_api.common.service.BaseService;
 import org.springframework.stereotype.Service;
 
@@ -35,7 +37,7 @@ public class ProfessorService extends BaseService<Professor, ProfessorRepository
 
     public void removerProfessor(Long id) {
         if (!isProfessorExistente(id)) {
-            throw new IllegalArgumentException("Cadastro do Professor não encontrado.");
+            throw new RecursoNaoEncontradoException("Cadastro do Professor não encontrado.");
         }
         this.excluir(id);
     }
@@ -55,10 +57,10 @@ public class ProfessorService extends BaseService<Professor, ProfessorRepository
 
     public ProfessorResponseDTO obterProfessorPorRegistroProfissional(String registroProfissional) {
         if (registroProfissional == null || registroProfissional.isEmpty()) {
-            throw new IllegalArgumentException("Registro profissional inválido.");
+            throw new BadRequestException("Registro profissional inválido.");
         }
         Professor professor = repository.findByRegistroProfissional(registroProfissional)
-                .orElseThrow(() -> new IllegalArgumentException("Não foi encontrado Professor com o registro profissional " + registroProfissional));
+                .orElseThrow(() -> new RecursoNaoEncontradoException("Não foi encontrado Professor com o registro profissional " + registroProfissional));
         return professorMapper.toResponseDto(professor);
     }
 

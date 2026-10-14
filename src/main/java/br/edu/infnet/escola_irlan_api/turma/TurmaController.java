@@ -1,6 +1,7 @@
 package br.edu.infnet.escola_irlan_api.turma;
 
 import br.edu.infnet.escola_irlan_api.aluno.AlunoTurmaRequestDTO;
+import br.edu.infnet.escola_irlan_api.common.dto.MensagemResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -61,15 +62,15 @@ public class TurmaController {
 
     @PutMapping("/{id}/desativar")
     @Operation(summary = "Desativar turma", description = "Marca uma turma como inativa")
-    public ResponseEntity<Void> desativarTurma(@PathVariable Long id) {
+    public ResponseEntity<MensagemResponse> desativarTurma(@PathVariable Long id) {
         turmaService.desativarTurma(id);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(new MensagemResponse("Turma desativada com sucesso."));
     }
 
     @PostMapping("/{id}/matricular/{idAluno}")
     @Operation(summary = "Matricular aluno", description = "Matricula um aluno à turma")
-    public ResponseEntity<Void> matricularAluno(@PathVariable Long id, @PathVariable Long idAluno) {
+    public ResponseEntity<MensagemResponse> matricularAluno(@PathVariable Long id, @PathVariable Long idAluno) {
         turmaService.matricularAluno(id, idAluno);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(new MensagemResponse("Aluno matriculado com sucesso."));
     }
 }

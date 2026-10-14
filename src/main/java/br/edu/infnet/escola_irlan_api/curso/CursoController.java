@@ -1,5 +1,6 @@
 package br.edu.infnet.escola_irlan_api.curso;
 
+import br.edu.infnet.escola_irlan_api.common.dto.MensagemResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -25,8 +26,7 @@ public class CursoController {
     @GetMapping
     @Operation(summary = "Listar todos os cursos", description = "Retorna uma lista de todos os cursos cadastrados")
     public ResponseEntity<Collection<CursoResponseDTO>> obterCursos() {
-        return ResponseEntity.ok(Arrays.asList(new CursoResponseDTO(1L, "teste", "teste", "teste", true)));
-//                cursoService.obterCursos());
+        return ResponseEntity.ok(cursoService.obterCursos());
     }
 
     @GetMapping("/{id}")
@@ -55,8 +55,8 @@ public class CursoController {
 
     @DeleteMapping("/{id}")
     @Operation(summary = "Excluir curso", description = "Exclui o registro de um curso do sistema")
-    public ResponseEntity<Void> excluirCurso(@PathVariable Long id) {
+    public ResponseEntity<MensagemResponse> excluirCurso(@PathVariable Long id) {
         cursoService.excluir(id);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(new MensagemResponse("Curso excluído com sucesso."));
     }
 }

@@ -1,5 +1,6 @@
 package br.edu.infnet.escola_irlan_api.aluno;
 
+import br.edu.infnet.escola_irlan_api.common.exception.RecursoNaoEncontradoException;
 import br.edu.infnet.escola_irlan_api.turma.Turma;
 import br.edu.infnet.escola_irlan_api.turma.TurmaRepository;
 import br.edu.infnet.escola_irlan_api.common.service.BaseService;
@@ -39,7 +40,7 @@ public class AlunoService extends BaseService<Aluno, AlunoRepository> {
 
     public void removerAlunoPorId(Long id) {
         if (!isAlunoExistente(id)) {
-            throw new IllegalArgumentException("Cadastro do Aluno não encontrado.");
+            throw new RecursoNaoEncontradoException("Cadastro do Aluno não encontrado.");
         }
         this.excluir(id);
     }
@@ -59,7 +60,7 @@ public class AlunoService extends BaseService<Aluno, AlunoRepository> {
 
     public AlunoResponseDTO obterAlunoPorMatricula(String matricula) {
         Aluno aluno = repository.findByMatricula(matricula)
-                .orElseThrow(() -> new IllegalArgumentException("Aluno não encontrado com a matrícula: " + matricula));
+                .orElseThrow(() -> new RecursoNaoEncontradoException("Aluno não encontrado com a matrícula: " + matricula));
         return alunoMapper.toResponseDto(aluno);
     }
 

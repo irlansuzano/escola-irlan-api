@@ -1,5 +1,6 @@
 package br.edu.infnet.escola_irlan_api.livro;
 
+import br.edu.infnet.escola_irlan_api.common.dto.MensagemResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -53,8 +54,8 @@ public class LivroController {
 
     @DeleteMapping("/{id}")
     @Operation(summary = "Excluir livro", description = "Exclui o registro de um livro do sistema")
-    public ResponseEntity<Void> excluirLivro(@PathVariable Long id) {
+    public ResponseEntity<MensagemResponse> excluirLivro(@PathVariable Long id) {
         livroService.excluir(id);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(new MensagemResponse("Livro excluído com sucesso."));
     }
 }

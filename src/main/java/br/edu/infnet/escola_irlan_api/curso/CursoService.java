@@ -1,5 +1,6 @@
 package br.edu.infnet.escola_irlan_api.curso;
 
+import br.edu.infnet.escola_irlan_api.common.exception.RecursoNaoEncontradoException;
 import br.edu.infnet.escola_irlan_api.professor.Professor;
 import br.edu.infnet.escola_irlan_api.professor.ProfessorRepository;
 import br.edu.infnet.escola_irlan_api.common.service.BaseService;
@@ -36,7 +37,7 @@ public class CursoService extends BaseService<Curso, CursoRepository> {
 
         if (dto.coordenadorId() != null) {
             Professor coordenador = professorRepository.findById(dto.coordenadorId())
-                    .orElseThrow(() -> new IllegalArgumentException("Professor coordenador não encontrado"));
+                    .orElseThrow(() -> new RecursoNaoEncontradoException("Professor coordenador não encontrado"));
             curso.setCoordenador(coordenador);
         }
 
@@ -52,7 +53,7 @@ public class CursoService extends BaseService<Curso, CursoRepository> {
 
         if (dto.coordenadorId() != null) {
             Professor coordenador = professorRepository.findById(dto.coordenadorId())
-                    .orElseThrow(() -> new IllegalArgumentException("Professor coordenador não encontrado"));
+                    .orElseThrow(() -> new RecursoNaoEncontradoException("Professor coordenador não encontrado"));
             cursoExistente.setCoordenador(coordenador);
         }
 
@@ -62,7 +63,7 @@ public class CursoService extends BaseService<Curso, CursoRepository> {
 
     public CursoResponseDTO buscarCursoPorNome(String nome) {
         Curso curso = repository.findByNome(nome)
-                .orElseThrow(() -> new IllegalArgumentException("não existe curso com o nome " + nome));
+                .orElseThrow(() -> new RecursoNaoEncontradoException("não existe curso com o nome " + nome));
         return cursoMapper.toResponseDto(curso);
     }
 

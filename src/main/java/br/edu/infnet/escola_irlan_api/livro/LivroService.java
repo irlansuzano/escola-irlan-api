@@ -1,5 +1,6 @@
 package br.edu.infnet.escola_irlan_api.livro;
 
+import br.edu.infnet.escola_irlan_api.common.exception.RecursoNaoEncontradoException;
 import br.edu.infnet.escola_irlan_api.common.service.BaseService;
 import org.springframework.stereotype.Service;
 
@@ -43,7 +44,7 @@ public class LivroService extends BaseService<Livro, LivroRepository> {
 
     public LivroResponseDTO buscarLivroPorTitulo(String titulo) {
         Livro livro = repository.findByTitulo(titulo)
-                .orElseThrow(() -> new IllegalArgumentException("Livro não encontrado com o título: " + titulo));
+                .orElseThrow(() -> new RecursoNaoEncontradoException("Livro não encontrado com o título: " + titulo));
         return livroMapper.toResponseDto(livro);
     }
 }

@@ -2,18 +2,17 @@ package br.edu.infnet.escola_irlan_api.turma;
 
 import br.edu.infnet.escola_irlan_api.aluno.Aluno;
 import br.edu.infnet.escola_irlan_api.aluno.AlunoMapper;
-import br.edu.infnet.escola_irlan_api.aluno.AlunoResponseDTO;
 import br.edu.infnet.escola_irlan_api.aluno.AlunoService;
-import br.edu.infnet.escola_irlan_api.aluno.AlunoTurmaRequestDTO;
 import br.edu.infnet.escola_irlan_api.curso.Curso;
 import br.edu.infnet.escola_irlan_api.professor.Professor;
 import br.edu.infnet.escola_irlan_api.curso.CursoRepository;
 import br.edu.infnet.escola_irlan_api.professor.ProfessorRepository;
+import br.edu.infnet.escola_irlan_api.common.exception.InternalServerErrorException;
+import br.edu.infnet.escola_irlan_api.common.exception.RecursoNaoEncontradoException;
 import br.edu.infnet.escola_irlan_api.common.service.BaseService;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
@@ -71,7 +70,7 @@ public class TurmaService extends BaseService<Turma, TurmaRepository> {
         boolean alunoJaMatriculado = turma.getAlunos().stream().anyMatch(a -> a.getId().equals(idAluno));
 
         if (alunoJaMatriculado) {
-            throw new IllegalArgumentException("Aluno já está matriculado nesta turma.");
+            throw new InternalServerErrorException("Aluno já está matriculado nesta turma.");
         }
 
         if (turma != null && aluno != null) {
@@ -86,11 +85,11 @@ public class TurmaService extends BaseService<Turma, TurmaRepository> {
         turma.setAtivo(dto.ativo());
 
         Professor professor = professorRepository.findById(dto.professorCoordenadorId())
-                .orElseThrow(() -> new IllegalArgumentException("Professor não encontrado"));
+                .orElseThrow(() -> new RecursoNaoEncontradoException("Professor não encontrado"));
         turma.setProfessorCoordenador(professor);
 
         Curso curso = cursoRepository.findById(dto.cursoId())
-                .orElseThrow(() -> new IllegalArgumentException("Curso não encontrado"));
+                .orElseThrow(() -> new RecursoNaoEncontradoException("Curso não encontrado"));
         turma.setCurso(curso);
 
         this.alterar(turma);
@@ -99,7 +98,7 @@ public class TurmaService extends BaseService<Turma, TurmaRepository> {
 
     public TurmaResponseDTO obterTurmaPorIdentificador(String identificador) {
         Turma turma = repository.findByIdentificador(identificador)
-                .orElseThrow(() -> new IllegalArgumentException("Turma não encontrada com o identificador: " + identificador));
+                .orElseThrow(() -> new RecursoNaoEncontradoException("Turma não encontrada com o identificador: " + identificador));
         return turmaMapper.toResponseDto(turma);
     }
 
@@ -107,11 +106,11 @@ public class TurmaService extends BaseService<Turma, TurmaRepository> {
         Turma turma = turmaMapper.toEntity(dto);
 
         Professor professor = professorRepository.findById(dto.professorCoordenadorId())
-                .orElseThrow(() -> new IllegalArgumentException("Professor não encontrado"));
+                .orElseThrow(() -> new RecursoNaoEncontradoException("Professor não encontrado"));
         turma.setProfessorCoordenador(professor);
 
         Curso curso = cursoRepository.findById(dto.cursoId())
-                .orElseThrow(() -> new IllegalArgumentException("Curso não encontrado"));
+                .orElseThrow(() -> new RecursoNaoEncontradoException("Curso não encontrado"));
         turma.setCurso(curso);
 
         return turma;

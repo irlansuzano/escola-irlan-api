@@ -4,6 +4,9 @@ import br.edu.infnet.escola_irlan_api.aluno.Aluno;
 import br.edu.infnet.escola_irlan_api.livro.Livro;
 import br.edu.infnet.escola_irlan_api.aluno.AlunoRepository;
 import br.edu.infnet.escola_irlan_api.livro.LivroRepository;
+import br.edu.infnet.escola_irlan_api.common.exception.BadRequestException;
+import br.edu.infnet.escola_irlan_api.common.exception.InternalServerErrorException;
+import br.edu.infnet.escola_irlan_api.common.exception.RecursoNaoEncontradoException;
 import br.edu.infnet.escola_irlan_api.common.service.BaseService;
 import org.springframework.stereotype.Service;
 
@@ -28,10 +31,10 @@ public class AluguelService extends BaseService<Aluguel, AluguelRepository> {
 
     public AluguelResponseDTO alugar(AluguelRequestDTO dto) {
         if (isLivroAlugado(dto.livroId())) {
-            throw new IllegalArgumentException("Livro já está alugado.");
+            throw new InternalServerErrorException("Livro já está alugado.");
         }
         if (dto.dataInicioAluguel().isAfter(LocalDate.now())) {
-            throw new IllegalArgumentException("Não é possível efetivar o aluguel antes da data de início.");
+            throw new BadRequestException("Não é possível efetivar o aluguel antes da data de início.");
         }
 
         Aluguel aluguel = toEntity(dto);
@@ -43,11 +46,11 @@ public class AluguelService extends BaseService<Aluguel, AluguelRepository> {
     public AluguelResponseDTO alterarLivroAlugado(Long idAluguel, Long idNovoLivro) {
         Aluguel aluguelAtual = this.obterPorId(idAluguel);
         if (Boolean.FALSE.equals(aluguelAtual.getAtivo())) {
-            throw new IllegalArgumentException("não existe aluguel ativo com esse livro.");
+            throw new BadRequestException("não existe aluguel ativo com esse livro.");
         }
 
         Livro novoLivro = livroRepository.findById(idNovoLivro)
-                .orElseThrow(() -> new IllegalArgumentException("Novo livro não encontrado"));
+                .orElseThrow(() -> new RecursoNaoEncontradoException("Novo livro não encontrado"));
 
         aluguelAtual.setLivro(novoLivro);
         this.alterar(aluguelAtual);
@@ -72,9 +75,10 @@ public class AluguelService extends BaseService<Aluguel, AluguelRepository> {
     }
 
     public void finalizarAluguel(Long idAluguel) {
-        Aluguel aluguel = repository.findById(idAluguel).orElse(null);
-        if (aluguel == null || !Boolean.TRUE.equals(aluguel.getAtivo())) {
-            return;
+        Aluguel aluguel = repository.findById(idAluguel)
+                .orElseThrow(() -> new RecursoNaoEncontradoException("Aluguel não encontrado."));
+        if (!Boolean.TRUE.equals(aluguel.getAtivo())) {
+            throw new BadRequestException("Este aluguel já está finalizado.");
         }
         aluguel.setAtivo(false);
         this.alterar(aluguel);
@@ -125,11 +129,11 @@ public class AluguelService extends BaseService<Aluguel, AluguelRepository> {
         Aluguel aluguel = aluguelMapper.toEntity(dto);
 
         Livro livro = livroRepository.findById(dto.livroId())
-                .orElseThrow(() -> new IllegalArgumentException("Livro não encontrado"));
+                .orElseThrow(() -> new RecursoNaoEncontradoException("Livro não encontrado"));
         aluguel.setLivro(livro);
 
         Aluno aluno = alunoRepository.findById(dto.alunoId())
-                .orElseThrow(() -> new IllegalArgumentException("Aluno não encontrado"));
+                .orElseThrow(() -> new RecursoNaoEncontradoException("Aluno não encontrado"));
         aluguel.setAluno(aluno);
 
         return aluguel;

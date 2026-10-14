@@ -1,0 +1,1092 @@
+{
+	"info": {
+		"_postman_id": "c6a8f6d2-8b4e-4f5a-a3a1-c6f8e7d9b0c1",
+		"name": "Escola Irlan API",
+		"description": "Coleção de requisições para a API Escola Irlan",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Alunos",
+			"item": [
+				{
+					"name": "Listar todos",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/alunos",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"alunos"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Obter por ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/alunos/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"alunos",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Obter por Matrícula",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/alunos/matricula/ALU001",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"alunos",
+								"matricula",
+								"ALU001"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Cadastrar Aluno",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"nome\": \"João Silva\",\n  \"cpf\": \"123.456.789-00\",\n  \"email\": \"joao.silva@email.com\",\n  \"dataNascimento\": \"2000-01-01\",\n  \"matricula\": \"ALU001\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/alunos",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"alunos"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Alterar Aluno",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"nome\": \"João Silva Alterado\",\n  \"cpf\": \"123.456.789-00\",\n  \"email\": \"joao.silva@email.com\",\n  \"dataNascimento\": \"2000-01-01\",\n  \"matricula\": \"ALU001\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/alunos/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"alunos",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Remover Aluno",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/alunos/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"alunos",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Professores",
+			"item": [
+				{
+					"name": "Listar todos",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/professores",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"professores"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Obter por ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/professores/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"professores",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Obter por Registro Profissional",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/professores/registro/REG-12345",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"professores",
+								"registro",
+								"REG-12345"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Cadastrar Professor",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"nome\": \"Prof. Irlan\",\n  \"cpf\": \"987.654.321-99\",\n  \"email\": \"irlan.prof@email.com\",\n  \"dataNascimento\": \"1980-05-20\",\n  \"registroProfissional\": \"REG-12345\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/professores",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"professores"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Alterar Professor",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"nome\": \"Prof. Irlan Alterado\",\n  \"cpf\": \"987.654.321-99\",\n  \"email\": \"irlan.prof@email.com\",\n  \"dataNascimento\": \"1980-05-20\",\n  \"registroProfissional\": \"REG-12345\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/professores/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"professores",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Remover Professor",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/professores/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"professores",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Cursos",
+			"item": [
+				{
+					"name": "Listar todos",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/cursos",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"cursos"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Obter por ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/cursos/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"cursos",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Obter por Nome",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/cursos/nome/Java",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"cursos",
+								"nome",
+								"Java"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Incluir Curso",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"nome\": \"Desenvolvimento Web Java\",\n  \"descricao\": \"Curso completo de Java com Spring Boot e Microservices\",\n  \"coordenadorId\": 1\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/cursos",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"cursos"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Alterar Curso",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"nome\": \"Java Microservices\",\n  \"descricao\": \"Descrição atualizada do curso\",\n  \"coordenadorId\": 1\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/cursos/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"cursos",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Excluir Curso",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/cursos/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"cursos",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Turmas",
+			"item": [
+				{
+					"name": "Listar todas",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/turmas",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"turmas"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Obter por ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/turmas/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"turmas",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Obter por Identificador",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/turmas/identificador/TURMA-A",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"turmas",
+								"identificador",
+								"TURMA-A"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Verificar se Ativa",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/turmas/1/ativa",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"turmas",
+								"1",
+								"ativa"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Cadastrar Turma",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"identificador\": \"TURMA-2026-JAVA\",\n  \"professorCoordenadorId\": 1,\n  \"cursoId\": 1,\n  \"ativo\": true\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/turmas",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"turmas"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Alterar Turma",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"identificador\": \"TURMA-2026-JAVA-MOD\",\n  \"professorCoordenadorId\": 1,\n  \"cursoId\": 1,\n  \"ativo\": true\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/turmas/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"turmas",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Desativar Turma",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/turmas/1/desativar",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"turmas",
+								"1",
+								"desativar"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Matricular Aluno",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/turmas/1/matricular/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"turmas",
+								"1",
+								"matricular",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Bibliotecários",
+			"item": [
+				{
+					"name": "Listar todos",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/bibliotecarios",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"bibliotecarios"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Obter por ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/bibliotecarios/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"bibliotecarios",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Listar ativos",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/bibliotecarios/ativos",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"bibliotecarios",
+								"ativos"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Buscar por Cargo",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/bibliotecarios/cargo/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"bibliotecarios",
+								"cargo",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Buscar por Turno",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/bibliotecarios/turno/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"bibliotecarios",
+								"turno",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Buscar por Nome",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/bibliotecarios/nome?nome=Irlan",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"bibliotecarios",
+								"nome"
+							],
+							"query": [
+								{
+									"key": "nome",
+									"value": "Irlan"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Buscar por Email",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/bibliotecarios/email?email=irlan@email.com",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"bibliotecarios",
+								"email"
+							],
+							"query": [
+								{
+									"key": "email",
+									"value": "irlan@email.com"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Cadastrar Bibliotecário",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"nome\": \"Maria Bibliotecária\",\n  \"cpf\": \"111.222.333-44\",\n  \"email\": \"maria.biblio@email.com\",\n  \"dataNascimento\": \"1990-10-10\",\n  \"cargo\": \"GERENCIA\",\n  \"turno\": \"MATUTINO\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/bibliotecarios/cadastrar",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"bibliotecarios",
+								"cadastrar"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Ativar Bibliotecário",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/bibliotecarios/ativar/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"bibliotecarios",
+								"ativar",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Desativar Bibliotecário",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/bibliotecarios/desativar/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"bibliotecarios",
+								"desativar",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Livros",
+			"item": [
+				{
+					"name": "Listar todos",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/livros",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"livros"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Obter por ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/livros/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"livros",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Obter por Título",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/livros/titulo/Clean Code",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"livros",
+								"titulo",
+								"Clean Code"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Incluir Livro",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"titulo\": \"Clean Code\",\n  \"autor\": \"Robert C. Martin\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/livros",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"livros"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Alterar Livro",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"titulo\": \"Clean Code - 2nd Edition\",\n  \"autor\": \"Robert C. Martin\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/livros/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"livros",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Excluir Livro",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/livros/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"livros",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Aluguéis",
+			"item": [
+				{
+					"name": "Listar todos",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/alugueis",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"alugueis"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Listar ativos",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/alugueis/ativos",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"alugueis",
+								"ativos"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Obter por ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/alugueis/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"alugueis",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Obter por Livro",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/alugueis/livro?idLivro=1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"alugueis",
+								"livro"
+							],
+							"query": [
+								{
+									"key": "idLivro",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Filtrar por Aluno",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/alugueis?idAluno=1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"alugueis"
+							],
+							"query": [
+								{
+									"key": "idAluno",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Registrar Aluguel",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"dataInicioAluguel\": \"2026-10-14\",\n  \"dataFimAluguel\": \"2026-10-21\",\n  \"livroId\": 1,\n  \"alunoId\": 1,\n  \"isAtivo\": true\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/alugueis/alugar",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"alugueis",
+								"alugar"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Alterar Livro do Aluguel",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/alugueis/1/alterar?idNovoLivro=2",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"alugueis",
+								"1",
+								"alterar"
+							],
+							"query": [
+								{
+									"key": "idNovoLivro",
+									"value": "2"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Devolver Livro",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/alugueis/1/devolver",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"alugueis",
+								"1",
+								"devolver"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:8081",
+			"type": "string"
+		}
+	]
+}
