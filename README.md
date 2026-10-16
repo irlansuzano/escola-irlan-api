@@ -23,7 +23,7 @@ O sistema está dividido nos seguintes módulos principais:
 - Java 17
 - Spring Boot 3.3.4
 - Spring Data JPA
-- H2 Database (Banco de dados em memória)
+- PostgreSQL Driver (Substituído H2)
 - MapStruct (Mapeamento de DTOs)
 - SpringDoc OpenAPI (Documentação Swagger)
 - Jakarta Validation
@@ -38,3 +38,16 @@ O sistema está dividido nos seguintes módulos principais:
 ## Documentação da API
 
 A documentação detalhada dos endpoints, incluindo modelos de requisição e resposta, pode ser acessada via Swagger UI após iniciar a aplicação.
+
+
+## Perguntas da entrega
+1. Qual funcionalidade foi separada da aplicação principal?<br>
+Todas as funções relacionadas ao serviço de biblioteca, que não sejam cadastro de funcionários.<br>
+2. Por que ela foi escolhida?<br>
+Pois uma biblioteca tem que funcionar como um serviço independente. Geralmente, as bibliotecas escolares/universitárias tem seu próprio fluxo de trabalho, funcionários/responsabilidades separados, o que tira o sentido de funcionamento em conjunto. A escola é ligada à biblioteca, mas os serviços são independentes.<br>
+3. O que ficou mais complexo depois da separação?
+A comunicação entre os serviços e a gestão de envios de notificações, pois agora é necessário lidar com filas de mensagens e integração entre serviços, o que adiciona complexidade ao sistema.<br>
+4. O que aconteceria com a funcionalidade principal caso o novo serviço ficasse indisponível?<br>
+A funcionalidade principal continuaria a funcionar, mas com limitações na parte relacionada aos empréstimos e devoluções de livros.<br>
+5. A funcionalidade realmente precisa permanecer como um serviço independente ou poderia continuar dentro da aplicação?<BR>
+Na minha opinião, sim! A biblioteca deve permanecer como um serviço independente, pois ela possui um fluxo de trabalho próprio e responsabilidades distintas da escola. Manter a biblioteca como um serviço separado permite maior flexibilidade, escalabilidade e manutenção do sistema, além de facilitar futuras integrações com outros sistemas ou serviços externos.
