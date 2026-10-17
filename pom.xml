@@ -87,6 +87,10 @@
             <version>4.1.5</version>
             <scope>compile</scope>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-batch</artifactId>
+        </dependency>
     </dependencies>
 
     <build>

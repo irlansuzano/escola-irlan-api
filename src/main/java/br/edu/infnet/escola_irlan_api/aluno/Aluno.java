@@ -1,18 +1,14 @@
 package br.edu.infnet.escola_irlan_api.aluno;
 
-import br.edu.infnet.escola_irlan_api.aluguel.Aluguel;
 import br.edu.infnet.escola_irlan_api.curso.Curso;
 import br.edu.infnet.escola_irlan_api.common.domain.Pessoa;
 import br.edu.infnet.escola_irlan_api.turma.Turma;
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -29,10 +25,6 @@ public class Aluno extends Pessoa {
     @JsonBackReference
     private Turma turma;
 
-    @OneToMany(mappedBy = "aluno", cascade = CascadeType.ALL)
-    @JsonManagedReference
-    private List<Aluguel> alugueis = new ArrayList<>();
-
     public Aluno(Long id, String nome, String cpf, String email, LocalDate dataNascimento, String matricula, String turma, Curso curso) {
         super(id, nome, cpf, email, dataNascimento);
         this.matricula = matricula;
@@ -40,14 +32,6 @@ public class Aluno extends Pessoa {
 
     public Aluno() {
 
-    }
-
-    public List<Aluguel> getAlugueis() {
-        return alugueis;
-    }
-
-    public void setAlugueis(List<Aluguel> alugueis) {
-        this.alugueis = alugueis;
     }
 
     public String getMatricula() {
@@ -82,6 +66,6 @@ public class Aluno extends Pessoa {
     @Override
     public String toString() {
         return String.format("Aluno %s, cpf: %s, email: %s, matricula: %s, turma: %s",
-                getNome(), getCpf(), getEmail(), matricula, turma.getIdentificador());
+                getNome(), getCpf(), getEmail(), matricula, turma != null ? turma.getIdentificador() : "N/A");
     }
 }

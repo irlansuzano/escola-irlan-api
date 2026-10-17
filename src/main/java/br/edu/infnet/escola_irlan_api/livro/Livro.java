@@ -1,14 +1,10 @@
 package br.edu.infnet.escola_irlan_api.livro;
 
-import br.edu.infnet.escola_irlan_api.aluguel.Aluguel;
 import br.edu.infnet.escola_irlan_api.common.domain.Identificavel;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -28,10 +24,6 @@ public class Livro implements Identificavel {
     @Size(min = 2, max = 150, message = "O autor deve ter entre 2 e 150 caracteres")
     @Column(name = "autor")
     private String autor;
-
-    @OneToMany(mappedBy = "livro", cascade = CascadeType.ALL)
-    @JsonIgnore
-    private List<Aluguel> alugueis = new ArrayList<>();
 
     public Livro() {
     }
@@ -65,18 +57,6 @@ public class Livro implements Identificavel {
 
     public void setAutor(String autor) {
         this.autor = autor;
-    }
-
-    public List<Aluguel> getAlugueis() {
-        return alugueis;
-    }
-
-    public void setAlugueis(List<Aluguel> alugueis) {
-        this.alugueis = alugueis;
-    }
-
-    public void addAluguel(Aluguel aluguel) {
-        this.alugueis.add(aluguel);
     }
 
     @Override

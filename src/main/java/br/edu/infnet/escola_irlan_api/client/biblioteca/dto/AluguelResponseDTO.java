@@ -1,4 +1,4 @@
-package br.edu.infnet.escola_irlan_api.aluguel;
+package br.edu.infnet.escola_irlan_api.client.biblioteca.dto;
 
 import java.time.LocalDate;
 
@@ -7,6 +7,6 @@ public record AluguelResponseDTO(
     LocalDate dataInicioAluguel,
     LocalDate dataFimAluguel,
     String livroTitulo,
-    String alunoNome,
+    Long alunoId,
     Boolean isAtivo
 ) {}
