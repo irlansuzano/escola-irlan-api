@@ -1,5 +1,6 @@
 package br.edu.infnet.escola_irlan_api.common.exception;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -88,12 +89,23 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(status).body(erroResponse);
     }
 
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<ErroResponse> tratarIntegridadeDados(DataIntegrityViolationException ex) {
+        HttpStatus status = HttpStatus.CONFLICT;
+        ErroResponse erroResponse = new ErroResponse(status.value(),
+                "Conflito de Dados",
+                "Não foi possível completar a operação devido a uma violação de integridade (ex: registro duplicado ou dependência ativa).",
+                LocalDateTime.now()
+        );
+        return ResponseEntity.status(status).body(erroResponse);
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErroResponse> tratarErroGenerico(Exception ex) {
         HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
         ErroResponse erroResponse = new ErroResponse(status.value(),
-                "Erro Interno no Servidor",
-                "Ocorreu um erro inesperado: " + ex.getMessage(),
+                "Erro Inesperado",
+                "Ocorreu um erro interno no servidor. Por favor, tente novamente mais tarde ou contate o suporte.",
                 LocalDateTime.now()
         );
         return ResponseEntity.status(status).body(erroResponse);

@@ -29,6 +29,11 @@ O sistema está dividido nos seguintes módulos principais:
 - Jakarta Validation
 - Spring Batch (Processamento em Lote)
 
+## Documentação da Arquitetura
+
+Para uma visão detalhada da estrutura dos microsserviços, diagramas UML e fluxos de comunicação, consulte o arquivo:
+- [DOCUMENTACAO_ARQUITETURA.md](../DOCUMENTACAO_ARQUITETURA.md) (ou na raiz do projeto).
+
 ## Como Executar
 
 ### Via Docker (Recomendado)
@@ -77,6 +82,25 @@ Para usar o Batch Import:
 Para usar, basta importar os arquivos JSON diretamente no seu Postman.
 
 
+## Padronização de Respostas de Erro
+
+A API utiliza um tratador global de exceções para garantir que todos os erros sejam retornados em um formato JSON estruturado, facilitando a integração e o entendimento pelo cliente:
+
+```json
+{
+  "status": 409,
+  "titulo": "Conflito de Dados",
+  "detalhe": "Não foi possível completar a operação devido a uma violação de integridade (ex: registro duplicado ou dependência ativa).",
+  "timestamp": "2026-10-17T16:20:00"
+}
+```
+
+### Principais Status Tratados:
+- **400 (Bad Request)**: Erros de validação de campos ou argumentos inválidos.
+- **404 (Not Found)**: Recurso não encontrado.
+- **409 (Conflict)**: Violação de integridade de dados (ex: CPF duplicado).
+- **500 (Internal Server Error)**: Erros inesperados no servidor (detalhes técnicos são mascarados por segurança).
+
 ## Perguntas da entrega de cada etapa
 # Etapa 1
 1. qual funcionalidade foi escolhida;<br>
@@ -113,8 +137,16 @@ O Docker Compose é utilizado para definir e executar aplicativos compostos por 
 Uma configuração centralizada procura resolver o problema de gerenciamento e manutenção das configurações em ambientes distribuídos, permitindo que as configurações sejam gerenciadas de forma unificada e simplificada.<br>
 # Etapa 4
 1. Qual operação foi escolhida para comunicação assíncrona?<br>
+As notificações de aluguel e devolução de livros da biblioteca para o serviço de notificações.<br>
 2. Por que essa operação não precisa necessariamente ser concluída durante a requisição original?<br>
+Porque o envio de uma notificação (como e-mail ou log) é uma tarefa secundária e não deve atrasar a confirmação do aluguel/devolução para o usuário.<br>
 3. O que acontece com a mensagem caso o consumidor esteja temporariamente indisponível?<br>
+A mensagem permanece na fila do RabbitMQ e será processada assim que o serviço de notificações voltar a ficar disponível, garantindo a entrega (eventual consistency).<br>
 4. Qual funcionalidade foi escolhida para processamento em lote?<br>
+A importação de Alunos, Funcionários (Professores/Bibliotecários) e Livros via arquivos CSV.<br>
 5. Por que essa funcionalidade é adequada para Batch?<br>
+Porque envolve o processamento de grandes volumes de dados que não precisam de resposta imediata em tempo real, permitindo otimizar o uso de recursos e transações de banco de dados.<br>
 6. Em quais situações da aplicação seria mais adequado utilizar REST, mensageria ou Batch?<br>
+   - **REST**: Para operações síncronas que exigem resposta imediata (ex: consultar um cadastro, validar login).
+   - **Mensageria**: Para tarefas assíncronas e desacoplamento (ex: disparar alertas, integrações entre serviços onde um não precisa esperar o outro).
+   - **Batch**: Para carga massiva de dados ou processamentos periódicos de grandes volumes (ex: relatórios mensais, importação de cadastros).<br>
